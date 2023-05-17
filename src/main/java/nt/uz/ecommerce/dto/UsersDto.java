@@ -1,5 +1,6 @@
 package nt.uz.ecommerce.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -16,6 +17,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties(value = "role", allowSetters = true)
 public class UsersDto {
     private Integer id;
     @NotBlank(message = AppStatusMessages.EMPTY_STRING)

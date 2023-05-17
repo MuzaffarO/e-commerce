@@ -111,7 +111,7 @@ public class UsersServiceImpl implements UsersService {
                 if (byPhoneNumber.isPresent() && !userOptional.get().getPhoneNumber().equals(usersDto.getPhoneNumber()))
                     return ResponseDto.<UsersDto>builder()
                             .code(AppStatusCodes.VALIDATION_ERROR_CODE)
-                            .message("User with this username " + usersDto.getPhoneNumber() + " already exists!")
+                            .message("User with this phone number " + usersDto.getPhoneNumber() + " already exists!")
                             .build();
             }
 
