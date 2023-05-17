@@ -31,7 +31,7 @@ public class UsersResources {
         return usersService.deleteUserById(id);
     }
 
-    @GetMapping("user-by-id")
+    @GetMapping("by-id")
     public ResponseDto<UsersDto> getUserById(@RequestParam Integer id){
         return usersService.getUserById(id);
     }
