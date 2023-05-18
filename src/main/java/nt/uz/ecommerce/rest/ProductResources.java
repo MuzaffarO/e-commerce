@@ -1,6 +1,7 @@
 package nt.uz.ecommerce.rest;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import nt.uz.ecommerce.dto.ProductDto;
 import nt.uz.ecommerce.dto.ResponseDto;
 import nt.uz.ecommerce.service.ProductService;
@@ -12,7 +13,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("product")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ProductResources {
 
     private final ProductService productService;

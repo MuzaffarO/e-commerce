@@ -1,6 +1,7 @@
 package nt.uz.ecommerce.service.impl;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import nt.uz.ecommerce.dto.ErrorDto;
 import nt.uz.ecommerce.dto.ProductDto;
 import nt.uz.ecommerce.dto.ResponseDto;
@@ -21,7 +22,7 @@ import static nt.uz.ecommerce.service.additional.AppStatusCodes.*;
 import static nt.uz.ecommerce.service.additional.AppStatusMessages.*;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private final ProductMapper productMapper;
