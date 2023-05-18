@@ -65,6 +65,7 @@ public class AddressServiceImpl implements AddressService {
         try {
             return ResponseDto.<List<AddressDto>>builder()
                     .message(OK)
+                    .success(true)
                     .data(addressRepository.findAll().stream()
                             .map(addressMapper::toDto)
                             .collect(Collectors.toList()))
