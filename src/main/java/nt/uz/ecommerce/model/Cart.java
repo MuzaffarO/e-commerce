@@ -15,7 +15,7 @@ public class Cart {
     @GeneratedValue(generator = "cartIdSequence")
     @SequenceGenerator(name = "cartIdSequence", sequenceName = "cart_id_seq", allocationSize = 1)
     private Integer id;
-    private Integer totalPrice;
+    private Double totalPrice;
     @OneToOne
     @JoinColumn(name = "user_id")
     private Users user;

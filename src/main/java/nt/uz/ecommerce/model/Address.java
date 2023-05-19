@@ -17,8 +17,5 @@ public class Address {
     private String city;
     private String apartmentNumber;
     private String postalCode;
-    private String phoneNumber;
-    @ManyToOne
-    private Users users;
-
+//    private String phoneNumber;
 }

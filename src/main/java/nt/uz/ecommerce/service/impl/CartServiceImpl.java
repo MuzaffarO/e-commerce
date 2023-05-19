@@ -71,7 +71,7 @@ public class CartServiceImpl implements CartService {
         try {
             Cart cart = new Cart();
             cart.setUser(users);
-            cart.setTotalPrice(0);
+            cart.setTotalPrice(0.0);
             cartRepository.save(cart);
             return true;
 

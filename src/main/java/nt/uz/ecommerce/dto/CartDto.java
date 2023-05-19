@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class CartDto {
     private Integer id;
-    private Integer totalPrice;
+    private Double totalPrice;
     private UsersDto user;
     private List<ProductDto> products;
 }
