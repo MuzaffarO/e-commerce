@@ -8,7 +8,7 @@ import nt.uz.ecommerce.service.OrderService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/oder")
+@RequestMapping("/order")
 @RequiredArgsConstructor
 public class OrderResources {
     private final OrderService orderService;

@@ -22,14 +22,14 @@ public class Order {
     @Enumerated(EnumType.STRING)
     @Column(name = "order_status")
     private OrderStatus orderStatus;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private Users user;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Address address;
 //    @OneToOne
 //    private OrderDetails orderDetails;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "order_products",
             joinColumns = @JoinColumn(name = "order_id"),

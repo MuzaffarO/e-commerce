@@ -50,8 +50,9 @@ public class OrderServiceImpl implements OrderService {
                 .totalPrice(cartById.get().getTotalPrice())
                 .build();
 
+        orderRepository.save(order);
         return ResponseDto.<OrderDto>builder()
-                .data(orderMapper.toDto(orderRepository.save(order)))
+                .data(orderMapper.toDto(order))
                 .message(OK)
                 .code(OK_CODE)
                 .build();
