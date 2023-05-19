@@ -5,6 +5,7 @@ import nt.uz.ecommerce.dto.ResponseDto;
 import nt.uz.ecommerce.dto.UsersDto;
 import nt.uz.ecommerce.model.Users;
 import nt.uz.ecommerce.repository.UsersRepository;
+import nt.uz.ecommerce.service.CartService;
 import nt.uz.ecommerce.service.UsersService;
 import nt.uz.ecommerce.service.additional.AppStatusCodes;
 import nt.uz.ecommerce.service.mapper.UsersMapper;
@@ -26,6 +27,7 @@ import static nt.uz.ecommerce.service.additional.AppStatusMessages.*;
 public class UsersServiceImpl implements UsersService {
     private final UsersRepository usersRepository;
     private final UsersMapper usersMapper;
+    private final CartService cartService;
 
     @Override
     public ResponseDto<UsersDto> addUser(UsersDto usersDto) {
@@ -46,7 +48,9 @@ public class UsersServiceImpl implements UsersService {
                         .build();
 
             Users users = usersMapper.toEntity(usersDto);
+
             usersRepository.save(users);
+            cartService.generateCart(users);
             return ResponseDto.<UsersDto>builder()
                     .success(true)
                     .data(usersMapper.toDto(users))
