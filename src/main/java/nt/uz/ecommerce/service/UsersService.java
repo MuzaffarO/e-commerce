@@ -2,6 +2,7 @@ package nt.uz.ecommerce.service;
 
 import nt.uz.ecommerce.dto.ResponseDto;
 import nt.uz.ecommerce.dto.UsersDto;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface UsersService {
     ResponseDto<UsersDto> deleteUserById(Integer id);
 
     ResponseDto<UsersDto> getUserByPhoneNumber(String phoneNumber);
+
+    UsersDto loadUserByUsername(String username) throws UsernameNotFoundException;
 }
