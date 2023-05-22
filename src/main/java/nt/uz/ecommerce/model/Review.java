@@ -1,6 +1,9 @@
 package nt.uz.ecommerce.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
@@ -19,7 +22,9 @@ public class Review {
     @SequenceGenerator(name = "review_id_seq", sequenceName = "review_id_seq", allocationSize = 1)
     private Integer id;
     private String description;
-    private Integer rank;
+    @Positive
+    @Max(5)
+    private short rank;
     @CreatedDate
     @CreationTimestamp
     private Date createdDate;

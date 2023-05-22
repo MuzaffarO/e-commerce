@@ -3,7 +3,6 @@ package nt.uz.ecommerce.security;
 
 import com.google.gson.Gson;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import nt.uz.ecommerce.dto.UsersDto;
