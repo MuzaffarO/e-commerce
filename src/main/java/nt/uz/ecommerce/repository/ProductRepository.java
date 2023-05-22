@@ -14,7 +14,7 @@ public interface ProductRepository extends JpaRepository<Products, Integer> {
             nativeQuery = true)
     List<Products> getExpensiveProducts();
 
-    @Query(value = "select p from Product p where (p.price, p.category.id) in (select max(p2.price), p2.category.id from Product p2 group by p2.category.id)")
+    @Query(value = "select p from product p where (p.price, p.category.id) in (select max(p2.price), p2.category.id from product p2 group by p2.category.id)")
     List<Products> getExpensiveProducts2();
 
     @Query(name = "findProductById")

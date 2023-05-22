@@ -1,9 +1,9 @@
 package nt.uz.ecommerce.repository;
 
-import nt.uz.ecommerce.model.Address;
+import nt.uz.ecommerce.model.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AddressRepository extends JpaRepository<Address, Integer> {
+public interface ReviewRepository extends JpaRepository<Review, Integer> {
 }
