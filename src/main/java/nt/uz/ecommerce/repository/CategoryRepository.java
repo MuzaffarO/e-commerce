@@ -1,10 +1,9 @@
 package nt.uz.ecommerce.repository;
 
-import nt.uz.ecommerce.model.Address;
+import nt.uz.ecommerce.model.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AddressRepository extends JpaRepository<Address, Integer> {
-    Optional<Address> findByCity(String city);
+public interface CategoryRepository extends JpaRepository<Category, Integer> {
 }
