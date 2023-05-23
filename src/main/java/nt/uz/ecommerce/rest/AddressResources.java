@@ -4,6 +4,7 @@ package nt.uz.ecommerce.rest;
 import lombok.RequiredArgsConstructor;
 import nt.uz.ecommerce.dto.AddressDto;
 import nt.uz.ecommerce.dto.ResponseDto;
+import nt.uz.ecommerce.dto.UsersDto;
 import nt.uz.ecommerce.service.AddressService;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +34,7 @@ public class AddressResources {
     }
 
     @DeleteMapping("deleteById/{id}")
-    public ResponseDto<AddressDto> deleteById(@PathVariable int id) {
+    public ResponseDto<AddressDto> deleteById(@PathVariable Integer id) {
         return addressService.deleteById(id);
     }
 
@@ -43,8 +44,13 @@ public class AddressResources {
 //    }
 
     @GetMapping("getById/{id}")
-    public ResponseDto<AddressDto> getById(@PathVariable int id) {
+    public ResponseDto<AddressDto> getById(@PathVariable Integer id) {
         return addressService.getById(id);
     }
 
+    @PostMapping("add-user-address")
+    public ResponseDto<UsersDto> addUserAddress(@RequestParam Integer userId, @RequestBody AddressDto addressDto) {
+        return addressService.updateAddress(userId, addressDto);
+
+    }
 }
