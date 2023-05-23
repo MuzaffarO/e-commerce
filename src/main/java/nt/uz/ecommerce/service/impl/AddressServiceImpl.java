@@ -28,7 +28,7 @@ public class AddressServiceImpl implements AddressService {
     private final AddressRepository addressRepository;
     private final AddressMapper addressMapper;
     private final UsersRepository usersRepository;
-    private final UsersMapper usersMapper;
+//    private final UsersMapper usersMapper;
 //    private final UsersService usersService;
     @Override
     public ResponseDto<AddressDto> add(AddressDto addressDto) {
