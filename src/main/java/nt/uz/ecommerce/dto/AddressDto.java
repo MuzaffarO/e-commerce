@@ -22,7 +22,7 @@ public class AddressDto {
     private String apartmentNumber;
     @NotBlank(message = AppStatusMessages.EMPTY_STRING)
     private String postalCode;
-    @NotBlank(message = AppStatusMessages.EMPTY_STRING)
-    private String phoneNumber;
+//    @NotBlank(message = AppStatusMessages.EMPTY_STRING)
+//    private String phoneNumber;
     private Users users;
 }

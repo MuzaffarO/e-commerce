@@ -127,18 +127,18 @@ public class ProductServiceImpl implements ProductService {
                         .build()
                 );    }
 
-    @Override
-    public ResponseDto<Page<ProductDto>> universalSearch2(Map<String, String> params) {
-        return null;
-    }
-
-    @Override
-    public ResponseDto<List<ProductDto>> getAllProductsWithSort(List<String> sort) {
-        return null;
-    }
-
-    @Override
-    public ResponseDto<List<ProductDto>> getExpensiveProducts() {
-        return null;
-    }
+//    @Override
+//    public ResponseDto<Page<ProductDto>> universalSearch2(Map<String, String> params) {
+//        return null;
+//    }
+//
+//    @Override
+//    public ResponseDto<List<ProductDto>> getAllProductsWithSort(List<String> sort) {
+//        return null;
+//    }
+//
+//    @Override
+//    public ResponseDto<List<ProductDto>> getExpensiveProducts() {
+//        return null;
+//    }
 }

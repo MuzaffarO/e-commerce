@@ -40,7 +40,6 @@ public class AddressServiceImpl implements AddressService {
                 .map(address1 -> {
                     address1.setCity(addressDto.getCity());
                     address1.setCountry(addressDto.getCountry());
-                    address1.setPhoneNumber(addressDto.getPhoneNumber());
                     address1.setApartmentNumber(addressDto.getApartmentNumber());
                     address1.setPostalCode(addressDto.getPostalCode());
                     return address1;

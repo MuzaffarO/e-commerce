@@ -1,18 +1,15 @@
 package nt.uz.ecommerce.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import nt.uz.ecommerce.dto.LoginDto;
 import nt.uz.ecommerce.dto.ResponseDto;
 import nt.uz.ecommerce.dto.UsersDto;
 import nt.uz.ecommerce.model.Users;
 import nt.uz.ecommerce.repository.UsersRepository;
+import nt.uz.ecommerce.service.CartService;
 import nt.uz.ecommerce.service.UsersService;
 import nt.uz.ecommerce.service.additional.AppStatusCodes;
 import nt.uz.ecommerce.service.mapper.UsersMapper;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import nt.uz.ecommerce.security.JwtService;
 
 
 import java.time.LocalDateTime;
@@ -20,18 +17,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static nt.uz.ecommerce.service.additional.AppStatusCodes.*;
+import static nt.uz.ecommerce.service.additional.AppStatusCodes.DATABASE_ERROR_CODE;
+import static nt.uz.ecommerce.service.additional.AppStatusCodes.NOT_FOUND_ERROR_CODE;
 import static nt.uz.ecommerce.service.additional.AppStatusMessages.*;
 
 
 @Service
 @RequiredArgsConstructor
 public class UsersServiceImpl implements UsersService {
-
     private final UsersRepository usersRepository;
     private final UsersMapper usersMapper;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
+    private final CartService cartService;
 
     @Override
     public ResponseDto<UsersDto> addUser(UsersDto usersDto) {
@@ -41,18 +37,20 @@ public class UsersServiceImpl implements UsersService {
 
             if (byEmail.isPresent())
                 return ResponseDto.<UsersDto>builder()
-                        .code(VALIDATION_ERROR_CODE)
+                        .code(AppStatusCodes.VALIDATION_ERROR_CODE)
                         .message("User with this email " + usersDto.getEmail() + " already exists!")
                         .build();
 
             if (byPhoneNumber.isPresent())
                 return ResponseDto.<UsersDto>builder()
-                        .code(VALIDATION_ERROR_CODE)
+                        .code(AppStatusCodes.VALIDATION_ERROR_CODE)
                         .message("User with this username " + usersDto.getPhoneNumber() + " already exists!")
                         .build();
 
             Users users = usersMapper.toEntity(usersDto);
+
             usersRepository.save(users);
+            cartService.generateCart(users);
             return ResponseDto.<UsersDto>builder()
                     .success(true)
                     .data(usersMapper.toDto(users))
@@ -91,7 +89,7 @@ public class UsersServiceImpl implements UsersService {
         if (usersDto.getId() == null) {
             return ResponseDto.<UsersDto>builder()
                     .message("Id is null!")
-                    .code(VALIDATION_ERROR_CODE)
+                    .code(AppStatusCodes.VALIDATION_ERROR_CODE)
                     .data(usersDto)
                     .build();
         }
@@ -108,7 +106,7 @@ public class UsersServiceImpl implements UsersService {
                 Optional<Users> byEmail = usersRepository.findByEmail(usersDto.getEmail());
                 if (byEmail.isPresent() && !userOptional.get().getEmail().equals(usersDto.getEmail()))
                     return ResponseDto.<UsersDto>builder()
-                            .code(VALIDATION_ERROR_CODE)
+                            .code(AppStatusCodes.VALIDATION_ERROR_CODE)
                             .message("User with this email " + usersDto.getEmail() + " already exists!")
                             .build();
             }
@@ -116,7 +114,7 @@ public class UsersServiceImpl implements UsersService {
                 Optional<Users> byPhoneNumber = usersRepository.findFirstByPhoneNumber(usersDto.getPhoneNumber());
                 if (byPhoneNumber.isPresent() && !userOptional.get().getPhoneNumber().equals(usersDto.getPhoneNumber()))
                     return ResponseDto.<UsersDto>builder()
-                            .code(VALIDATION_ERROR_CODE)
+                            .code(AppStatusCodes.VALIDATION_ERROR_CODE)
                             .message("User with this phone number " + usersDto.getPhoneNumber() + " already exists!")
                             .build();
             }
@@ -210,29 +208,5 @@ public class UsersServiceImpl implements UsersService {
         user.setPhoneNumber(Optional.ofNullable(usersDto.getPhoneNumber()).orElse(user.getPhoneNumber()));
 
         return user;
-    }
-
-    @Override
-    public UsersDto loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Users> users = usersRepository.findByUsername(username);
-        if(users.isEmpty()) throw new UsernameNotFoundException("user is not found");
-
-        return usersMapper.toDto(users.get());
-    }
-    public ResponseDto<String> login(LoginDto loginDto) {
-        UsersDto users = loadUserByUsername(loginDto.getUsername());
-        if(!passwordEncoder.matches(loginDto.getPassword(), users.getPassword())){
-            return ResponseDto.<String>builder()
-                    .message("Password is not correct")
-                    .code(VALIDATION_ERROR_CODE)
-                    .build();
-        }
-
-        return ResponseDto.<String>builder()
-                .code(OK_CODE)
-                .message(OK)
-                .data(jwtService.generateToken(users))
-                .success(true)
-                .build();
     }
 }
