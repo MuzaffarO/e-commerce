@@ -30,7 +30,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final UsersMapper usersMapper;
 
     @Override
-    public ResponseDto<ReviewDto> createReview(ReviewDto reviewDto, Integer product_id) {
+    public ResponseDto<ReviewDto> createReview(String comment, short rank, Integer product_id) {
         UsersDto principal = (UsersDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<Products> products = productRepository.findById(product_id);
         if(products.isEmpty()){
@@ -41,8 +41,8 @@ public class ReviewServiceImpl implements ReviewService {
         }
         Review review = Review.builder()
                 .users(usersMapper.toEntity(principal))
-//                .rank(rank)
-//                .description(comment)
+                .rank(rank)
+                .description(comment)
                 .products(products.get())
                 .build();
         try {

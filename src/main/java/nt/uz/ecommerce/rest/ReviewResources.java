@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import nt.uz.ecommerce.dto.ResponseDto;
 import nt.uz.ecommerce.dto.ReviewDto;
 import nt.uz.ecommerce.service.ReviewService;
-import nt.uz.ecommerce.service.impl.ReviewServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +18,16 @@ public class ReviewResources {
     @GetMapping
     public ResponseDto<List<ReviewDto>> viewAll(@PathVariable Integer product_id){
         return reviewService.getAll(product_id);
+    }
+
+    @PostMapping("/{id}")
+    public ResponseDto<ReviewDto> addReview(@RequestParam String comment, short rank, @PathVariable int product_id){
+        return reviewService.createReview(comment, rank, product_id);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseDto<ReviewDto> deleteComment(@PathVariable Integer id){
+        return reviewService.delete(id);
     }
 
 
