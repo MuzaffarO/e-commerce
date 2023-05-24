@@ -12,7 +12,7 @@ import nt.uz.ecommerce.service.mapper.UsersMapper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import nt.uz.ecommerce.security.JwtService;
+//import nt.uz.ecommerce.security.JwtService;
 
 
 import java.time.LocalDateTime;
@@ -30,8 +30,8 @@ public class UsersServiceImpl implements UsersService {
 
     private final UsersRepository usersRepository;
     private final UsersMapper usersMapper;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
+//    private final PasswordEncoder passwordEncoder;
+//    private final JwtService jwtService;
 
     @Override
     public ResponseDto<UsersDto> addUser(UsersDto usersDto) {
@@ -214,25 +214,25 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public UsersDto loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Users> users = usersRepository.findByUsername(username);
+        Optional<Users> users = usersRepository.findByFirstName(username);
         if(users.isEmpty()) throw new UsernameNotFoundException("user is not found");
 
         return usersMapper.toDto(users.get());
     }
-    public ResponseDto<String> login(LoginDto loginDto) {
-        UsersDto users = loadUserByUsername(loginDto.getUsername());
-        if(!passwordEncoder.matches(loginDto.getPassword(), users.getPassword())){
-            return ResponseDto.<String>builder()
-                    .message("Password is not correct")
-                    .code(VALIDATION_ERROR_CODE)
-                    .build();
-        }
-
-        return ResponseDto.<String>builder()
-                .code(OK_CODE)
-                .message(OK)
-                .data(jwtService.generateToken(users))
-                .success(true)
-                .build();
-    }
+//    public ResponseDto<String> login(LoginDto loginDto) {
+//        UsersDto users = loadUserByUsername(loginDto.getUsername());
+//        if(!passwordEncoder.matches(loginDto.getPassword(), users.getPassword())){
+//            return ResponseDto.<String>builder()
+//                    .message("Password is not correct")
+//                    .code(VALIDATION_ERROR_CODE)
+//                    .build();
+//        }
+//
+//        return ResponseDto.<String>builder()
+//                .code(OK_CODE)
+//                .message(OK)
+//                .data(jwtService.generateToken(users))
+//                .success(true)
+//                .build();
+//    }
 }

@@ -10,16 +10,16 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Products, Integer> {
-    @Query(value = "select * from product p where (p.price, p.category_id) in (select max(p2.price), p2.category_id from product p2 group by p2.category_id)",
+    @Query(value = "select * from products p where (p.price, p.category_id) in (select max(p2.price), p2.category_id from products p2 group by p2.category_id)",
             nativeQuery = true)
     List<Products> getExpensiveProducts();
 
-    @Query(value = "select p from product p where (p.price, p.category.id) in (select max(p2.price), p2.category.id from product p2 group by p2.category.id)")
+    @Query(value = "select p from Products p where (p.price, p.category.id) in (select max(p2.price), p2.category.id from Products p2 group by p2.category.id)")
     List<Products> getExpensiveProducts2();
 
-    @Query(name = "findProductById")
-    List<Products> findProductById(@Param("id") Integer id,
-                                  @Param("name") String name,
-                                  @Param("amount") Integer amount,
-                                  @Param("price") Integer price);
+//    @Query(name = "findProductById")
+//    List<Products> findProductById(@Param("id") Integer id,
+//                                  @Param("name") String name,
+//                                  @Param("amount") Integer amount,
+//                                  @Param("price") Integer price);
 }

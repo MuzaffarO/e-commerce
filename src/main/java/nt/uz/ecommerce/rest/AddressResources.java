@@ -48,8 +48,8 @@ public class AddressResources {
         return addressService.getById(id);
     }
 
-    @PostMapping("add-user-address")
-    public ResponseDto<UsersDto> addUserAddress(@RequestParam Integer userId, @RequestBody AddressDto addressDto) {
+    @PostMapping("add-user-address/{userId}")
+    public ResponseDto<UsersDto> addUserAddress(@PathVariable Integer userId, @RequestBody AddressDto addressDto) {
         return addressService.updateAddress(userId, addressDto);
 
     }
