@@ -15,5 +15,6 @@ public class ReviewDto {
     @Positive(message = NEGATIVE_VALUE)
     @Max(value = 5, message = SIZE_MISMATCH)
     private Integer rank;
+    private UsersDto users;
 
 }

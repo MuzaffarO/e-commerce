@@ -2,13 +2,12 @@ package nt.uz.ecommerce.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -27,7 +26,7 @@ public class Review {
     private short rank;
     @CreatedDate
     @CreationTimestamp
-    private Date createdDate;
+    private LocalDateTime createdAt;
     @ManyToOne
     private Users users;
     @ManyToOne

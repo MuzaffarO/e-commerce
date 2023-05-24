@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.List;
+
 import static nt.uz.ecommerce.service.additional.AppStatusMessages.*;
 
 @Getter
@@ -20,5 +22,5 @@ public class CategoryDto {
     private String name;
     @Positive(message = NEGATIVE_VALUE)
     @Max(value = 1000, message = SIZE_MISMATCH)
-    private Integer parentId;
+    private List<CategoryDto> parentCategoryId;
 }

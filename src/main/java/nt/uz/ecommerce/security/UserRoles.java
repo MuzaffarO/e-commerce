@@ -10,13 +10,13 @@ public enum UserRoles{
     USER(List.of(READ)),
     MODERATOR(List.of(READ,CREATE)),
     SUPER_ADMIN(List.of(CREATE,READ,UPDATE,DELETE));
-    List<UserAuthorities> authorities;
+    final List<UserAuthorities> authorities;
     UserRoles (List<UserAuthorities> authorities){
         this.authorities=authorities;
     }
     public List<String> getAuthorities(){
         List<String> list = new ArrayList<>(this.authorities.stream()
-                .map(userAuthorities -> userAuthorities.getName())
+                .map(UserAuthorities::getName)
                 .toList());
         list.add("ROLE_"+this.name());
         return list;

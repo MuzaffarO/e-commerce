@@ -23,6 +23,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
+
     @Override
     public ResponseDto<CategoryDto> addCategory(CategoryDto categoryDto) {
         try {
@@ -47,36 +48,38 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public ResponseDto<CategoryDto> updateCategory(CategoryDto categoryDto) {
-        if (categoryDto.getId() == null){
-            return ResponseDto.<CategoryDto>builder()
-                    .code(-2)
-                    .message("Category id is null")
-                    .build();
-        }
-        Optional<Category> categoryOptional = categoryRepository.findById(categoryDto.getId());
-        if (categoryOptional.isEmpty()){
-            return ResponseDto.<CategoryDto>builder()
-                    .message("NOT_FOUND")
-                    .code(-1)
-                    .data(categoryDto)
-                    .build();
-        }
-
-        Category category = categoryOptional.get();
-        if (categoryDto.getName() != null){
-            category.setName(categoryDto.getName());
-        }
-        if (categoryDto.getParentId() != null) {
-            category.setParentId(categoryDto.getParentId());
-        }
-        categoryRepository.save(category);
-
-        return ResponseDto.<CategoryDto>builder()
-                .message("OK")
-                .success(true)
-                .data(categoryMapper.toDto(category))
-                .build();
+//        if (categoryDto.getId() == null){
+//            return ResponseDto.<CategoryDto>builder()
+//                    .code(-2)
+//                    .message("Category id is null")
+//                    .build();
+//        }
+//        Optional<Category> categoryOptional = categoryRepository.findById(categoryDto.getId());
+//        if (categoryOptional.isEmpty()){
+//            return ResponseDto.<CategoryDto>builder()
+//                    .message("NOT_FOUND")
+//                    .code(-1)
+//                    .data(categoryDto)
+//                    .build();
+//        }
+//
+//        Category category = categoryOptional.get();
+//        if (categoryDto.getName() != null){
+//            category.setName(categoryDto.getName());
+//        }
+//        if (categoryDto.getParentCategoryId() != null) {
+//            category.setParentCategoryId(categoryDto.getParentCategoryId());
+//        }
+//        categoryRepository.save(category);
+//
+//        return ResponseDto.<CategoryDto>builder()
+//                .message("OK")
+//                .success(true)
+//                .data(categoryMapper.toDto(category))
+//                .build();
+        return null;
     }
+
 
     @Override
     public ResponseDto<List<CategoryDto>> getAll() {

@@ -9,6 +9,7 @@ import nt.uz.ecommerce.service.CartService;
 import nt.uz.ecommerce.service.UsersService;
 import nt.uz.ecommerce.service.additional.AppStatusCodes;
 import nt.uz.ecommerce.service.mapper.UsersMapper;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 
@@ -196,6 +197,11 @@ public class UsersServiceImpl implements UsersService {
                         .message("User with phone number " + phoneNumber + " is not found")
                         .code(-1)
                         .build());
+    }
+
+    @Override
+    public UsersDto loadUserByUsername(String username) throws UsernameNotFoundException {
+        return null;
     }
 
     public Users editUserInfo(Users user, UsersDto usersDto) {

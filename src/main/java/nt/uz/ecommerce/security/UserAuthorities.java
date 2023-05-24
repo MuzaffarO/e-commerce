@@ -5,7 +5,7 @@ public enum UserAuthorities {
     UPDATE("UPDATE"),
     DELETE("DELETE"),
     CREATE("CREATE");
-    private String name;
+    private final String name;
     UserAuthorities(String name){
         this.name=name;
     }
