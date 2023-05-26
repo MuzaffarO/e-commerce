@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Table(name = "address")
 @Entity
 @Getter
@@ -17,5 +19,12 @@ public class Address {
     private String city;
     private String apartmentNumber;
     private String postalCode;
-//    private String phoneNumber;
+    private String phoneNumber;
+    @ManyToMany
+    @JoinTable(
+            name = "user_address",
+            joinColumns = @JoinColumn(name = "address_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<Users> users;
+
 }

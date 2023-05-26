@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import nt.uz.ecommerce.model.Users;
 import nt.uz.ecommerce.service.additional.AppStatusMessages;
 
 @Getter
@@ -22,7 +21,6 @@ public class AddressDto {
     private String apartmentNumber;
     @NotBlank(message = AppStatusMessages.EMPTY_STRING)
     private String postalCode;
-//    @NotBlank(message = AppStatusMessages.EMPTY_STRING)
-//    private String phoneNumber;
-    private Users users;
+    @NotBlank(message = AppStatusMessages.EMPTY_STRING)
+    private String phoneNumber;
 }

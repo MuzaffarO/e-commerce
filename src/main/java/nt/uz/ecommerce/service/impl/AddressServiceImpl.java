@@ -3,11 +3,15 @@ package nt.uz.ecommerce.service.impl;
 import lombok.RequiredArgsConstructor;
 import nt.uz.ecommerce.dto.AddressDto;
 import nt.uz.ecommerce.dto.ResponseDto;
+import nt.uz.ecommerce.dto.UsersDto;
 import nt.uz.ecommerce.model.Address;
+import nt.uz.ecommerce.model.Users;
 import nt.uz.ecommerce.repository.AddressRepository;
+import nt.uz.ecommerce.repository.UsersRepository;
 import nt.uz.ecommerce.service.AddressService;
 import nt.uz.ecommerce.service.additional.ECommerceMessage;
 import nt.uz.ecommerce.service.mapper.AddressMapper;
+import nt.uz.ecommerce.service.mapper.UsersMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +27,8 @@ public class AddressServiceImpl implements AddressService {
 
     private final AddressRepository addressRepository;
     private final AddressMapper addressMapper;
+    private final UsersRepository usersRepository;
+//    private final UsersMapper usersMapper;
 //    private final UsersService usersService;
     @Override
     public ResponseDto<AddressDto> add(AddressDto addressDto) {
@@ -122,6 +128,34 @@ public class AddressServiceImpl implements AddressService {
                 .success(false)
                 .message(NOT_FOUND)
                 .code(NOT_FOUND_ERROR_CODE)
+                .build();
+    }
+
+    @Override
+    public ResponseDto<UsersDto> updateAddress(Integer userId, AddressDto addressDto) {
+        Optional<Users> users = usersRepository.findById(userId);
+//        Optional<Address> address = addressRepository.findByCity(addressDto.getCity());
+
+//        if (address.isEmpty()) {
+//            addressRepository.save(addressMapper.toEntity(addressDto));
+//        }
+
+        if (users.isEmpty()) {
+            return ResponseDto.<UsersDto>builder()
+                    .success(false)
+                    .code(NOT_FOUND_ERROR_CODE)
+                    .message(NOT_FOUND)
+                    .build();
+        }
+
+        Address address = addressMapper.toEntity(addressDto);
+        address.setUsers(users.stream().toList());
+        addressRepository.save(address);
+
+        return ResponseDto.<UsersDto>builder()
+                .success(true)
+                .code(OK_CODE)
+                .message(OK)
                 .build();
     }
 }
