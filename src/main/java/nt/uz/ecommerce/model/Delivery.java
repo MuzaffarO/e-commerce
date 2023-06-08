@@ -16,8 +16,8 @@ public class Delivery {
     private Users user;
     @ManyToOne
     private Address address;
-//    @OneToOne
-//    private OrderDetails orderDetails;
+    @OneToOne
+    private OrderDetails orderDetails;
     private Boolean isActive;
 
 }
