@@ -2,14 +2,13 @@ package nt.uz.ecommerce.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import nt.uz.ecommerce.dto.ResponseDto;
-import nt.uz.ecommerce.exceptions.FileConvertingException;
+import nt.uz.ecommerce.model.Image;
 import nt.uz.ecommerce.model.ImageResolution;
 import nt.uz.ecommerce.repository.ImageRepository;
 import nt.uz.ecommerce.repository.ImageResolutionRepository;
 import nt.uz.ecommerce.service.ImageService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import nt.uz.ecommerce.model.Image;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -19,15 +18,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicReference;
+
+import static nt.uz.ecommerce.service.additional.AppStatusCodes.*;
+import static nt.uz.ecommerce.service.additional.AppStatusMessages.*;
 
 @Service
 @RequiredArgsConstructor
@@ -47,74 +44,49 @@ public class ImageServiceImpl implements ImageService {
 
 
     @Override
-    public ResponseDto<Integer> fileUpload(Integer productId, MultipartFile file) {
-        List<ImageResolution> resolutions = imageResolutionRepository.findAll();
-        Image entity = new Image();
-        Image entity2 = new Image();
-        Image entity3 = new Image();
+    public ResponseDto<Integer> fileUpload(Integer productId, String size, MultipartFile file) {
+        Optional<ImageResolution> imageSize = imageResolutionRepository.findBySize(size);
 
-        entity.setProductId(productId);
-        entity.setImageResolution(resolutions.get(0));
-
-        entity2.setProductId(productId);
-        entity2.setImageResolution(resolutions.get(1));
-
-        entity3.setProductId(productId);
-        entity3.setImageResolution(resolutions.get(2));
-
-        entity.setExt(file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")));
-        entity2.setExt(file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")));
-        entity3.setExt(file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")));
-
-        ExecutorService executorService = Executors.newFixedThreadPool(3);
-        List<Future<String>> futures = null;
-        try {
-            futures = executorService.invokeAll(
-                    Arrays.asList(
-                            () -> saveLargeSize(file, productId, entity.getExt()),
-                            () -> saveMediumSize(file, productId, entity2.getExt()),
-                            () -> saveSmallSize(file, productId, entity3.getExt())
-                    )
-            );
-        } catch (InterruptedException e) {
-            throw new FileConvertingException("File converting exception: " + e.getMessage());
+        if (imageSize.isEmpty()) {
+            return ResponseDto.<Integer>builder()
+                    .data(null)
+                    .message(NOT_FOUND)
+                    .success(false)
+                    .code(NOT_FOUND_ERROR_CODE)
+                    .build();
         }
 
-        futures.stream()
-                .map(result -> {
-                    try {
-                        return result.get();
-                    } catch (InterruptedException | ExecutionException e) {
-                        throw new FileConvertingException(e.getMessage());
-                    }
-                })
-                .forEach(r -> {
-                    if (r.substring(17, 22).equalsIgnoreCase("LARGE")) {
-                        entity.setPath(r);
-                    } else if (r.substring(17, 23).equalsIgnoreCase("MEDIUM")) {
-                        entity2.setPath(r);
-                    } else if (r.substring(17, 22).equalsIgnoreCase("SMALL")) {
-                        entity3.setPath(r);
-                    }
-                });
-        executorService.shutdownNow();
+        Image entity = new Image();
 
+        entity.setProductId(productId);
+        entity.setImageResolution(imageSize.get());
+        entity.setExt(file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")));
+
+        String filePath = null;
+
+        if (size.equalsIgnoreCase("LARGE")) {
+            filePath = saveLargeSize(file, productId, entity.getExt());
+        }
+        else if (size.equalsIgnoreCase("MEDIUM")) {
+            filePath = saveMediumSize(file, productId, entity.getExt());
+        }
+        else if (size.equalsIgnoreCase("SMALL")) {
+            filePath = saveSmallSize(file, productId, entity.getExt());
+        }
+        entity.setPath(filePath);
 
         try {
-//            Optional<List<Image>> upImage = imageRepository.findAllByProductId(productId);
             Image savedImage = imageRepository.save(entity);
-            imageRepository.save(entity2);
-            imageRepository.save(entity3);
 
             return ResponseDto.<Integer>builder()
                     .data(savedImage.getId())
-                    .message("OK")
+                    .message(OK)
                     .success(true)
                     .build();
         } catch (Exception e) {
             return ResponseDto.<Integer>builder()
-                    .code(2)  //AppStatusCodes.DATABASE_ERROR_CODE
-                    .message("Database error" + ": " + e.getMessage()) //AppStatusMessages.DATABASE_ERROR
+                    .code(DATABASE_ERROR_CODE)
+                    .message(DATABASE_ERROR + ": " + e.getMessage())
                     .build();
         }
     }
@@ -123,7 +95,7 @@ public class ImageServiceImpl implements ImageService {
     public ResponseDto<byte[]> getFileById(Integer productId, String size) throws IOException {
         if (productId == null || size == null) {
             return ResponseDto.<byte[]>builder()
-                    .message("Null value") //AppStatusMessages.NULL_VALUE
+                    .message(NULL_VALUE)
                     .code(-2) //AppStatusCodes.VALIDATION_ERROR_CODE
                     .build();
         }
@@ -133,8 +105,8 @@ public class ImageServiceImpl implements ImageService {
 
         if (optional.isEmpty()) {
             return ResponseDto.<byte[]>builder()
-                    .message("Not found") //AppStatusMessages.NOT_FOUND
-                    .code(-1) //AppStatusCodes.NOT_FOUND_ERROR_CODE
+                    .message(NOT_FOUND)
+                    .code(NOT_FOUND_ERROR_CODE)
                     .build();
         }
 
@@ -163,8 +135,8 @@ public class ImageServiceImpl implements ImageService {
         byte[] file = new FileInputStream(imagePath.get()).readAllBytes();
 
         return ResponseDto.<byte[]>builder()
-                .message("OK") //AppStatusMessages.OK
-                .code(0) //AppStatusMessages.OK
+                .message(OK)
+                .code(OK_CODE)
                 .data(file)
                 .success(true)
                 .build();

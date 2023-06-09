@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import nt.uz.ecommerce.security.UserRoles;
 import nt.uz.ecommerce.service.additional.AppStatusMessages;
 
 import java.time.LocalDateTime;
@@ -17,7 +18,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties(value = "role", allowSetters = true)
+@JsonIgnoreProperties(value = "roles", allowSetters = true)
 public class UsersDto {
     private Integer id;
     @NotBlank(message = AppStatusMessages.EMPTY_STRING)
@@ -34,5 +35,5 @@ public class UsersDto {
     private Date birthDate;
     @NotBlank(message = AppStatusMessages.EMPTY_STRING)
     private String password;
-    private String role;
+    private UserRoles roles;
 }

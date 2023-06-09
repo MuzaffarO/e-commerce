@@ -2,6 +2,7 @@ package nt.uz.ecommerce.rest;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import nt.uz.ecommerce.dto.GetTokenDto;
 import nt.uz.ecommerce.dto.ResponseDto;
 import nt.uz.ecommerce.dto.UsersDto;
 import nt.uz.ecommerce.service.UsersService;
@@ -38,6 +39,11 @@ public class UsersResources {
     @GetMapping("by-phone-number")
     public ResponseDto<UsersDto> getUserByPhoneNumber(@RequestParam String phoneNumber){
         return usersService.getUserByPhoneNumber(phoneNumber);
+    }
+
+    @PostMapping("get-token")
+    public ResponseDto<String> getToken(@RequestBody GetTokenDto getTokenDto){
+        return usersService.getToken(getTokenDto);
     }
 
 

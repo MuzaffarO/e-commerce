@@ -16,8 +16,8 @@ public class ImageResources {
     private final ImageService imageService;
 
     @PostMapping()
-    public ResponseDto<Integer> uploadFile(@RequestParam Integer productId, @RequestPart("file") MultipartFile file){
-        return imageService.fileUpload(productId, file);
+    public ResponseDto<Integer> uploadFile(@RequestParam Integer productId, @RequestParam String size, @RequestPart("file") MultipartFile file){
+        return imageService.fileUpload(productId, size, file);
     }
 
     @GetMapping()
