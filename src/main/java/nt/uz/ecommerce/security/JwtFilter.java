@@ -36,9 +36,7 @@ public class JwtFilter extends OncePerRequestFilter {
                                 .build()
                 );
             }
-//            String subject = jwtService.getClaimsFromToken(authorization.substring(7)).getSubject();
             String authToken = authorization.substring(7);
-//            gson.fromJson(subject, UsersDto.class);
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(authToken, authToken);
             SecurityContextHolder.getContext().setAuthentication(
