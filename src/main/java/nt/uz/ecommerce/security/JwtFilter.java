@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import nt.uz.ecommerce.dto.ResponseDto;
@@ -21,6 +22,7 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final Gson gson;
+    private final AuthenticationManager authenticationManager;
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException {
         String authorization = request.getHeader("Authorization");
@@ -38,8 +40,10 @@ public class JwtFilter extends OncePerRequestFilter {
             String authToken = authorization.substring(7);
 //            gson.fromJson(subject, UsersDto.class);
             UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(authToken, null);
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                    new UsernamePasswordAuthenticationToken(authToken, authToken);
+            SecurityContextHolder.getContext().setAuthentication(
+                    authenticationManager
+                            .authenticate(authenticationToken));
         }
 
         filterChain.doFilter(request,response);

@@ -3,7 +3,6 @@ package nt.uz.ecommerce.security;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import nt.uz.ecommerce.model.Users;
-import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

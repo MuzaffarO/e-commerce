@@ -72,10 +72,4 @@ public class JwtService {
                 .getBody()
                 .get(claimName, type);
     }
-
-//    public UsersDto getSubject(String token){
-//        String uuid = getClaims(token).getSubject();
-//        return userSessionRepository.findById(uuid).map(s -> gson.fromJson(s.getUserInfo(), UsersDto.class))
-//                .orElseThrow(() -> new JwtException("Token is expired"));
-//    }
 }
