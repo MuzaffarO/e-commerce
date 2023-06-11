@@ -14,6 +14,6 @@ public class DeliveryDto {
     private Integer id;
     private UsersDto userDto;
     private Address address;
-//    private OrderDto orderDto;
+    private OrderDto orderDto;
     private Boolean isActive;
 }

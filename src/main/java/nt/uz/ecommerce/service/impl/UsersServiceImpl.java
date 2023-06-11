@@ -1,11 +1,15 @@
 package nt.uz.ecommerce.service.impl;
 
+import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
+import nt.uz.ecommerce.dto.GetTokenDto;
 import nt.uz.ecommerce.dto.LoginDto;
 import nt.uz.ecommerce.dto.ResponseDto;
 import nt.uz.ecommerce.dto.UsersDto;
 import nt.uz.ecommerce.model.Users;
 import nt.uz.ecommerce.repository.UsersRepository;
+import nt.uz.ecommerce.security.JwtService;
+import nt.uz.ecommerce.security.UserRoles;
 import nt.uz.ecommerce.service.UsersService;
 import nt.uz.ecommerce.service.additional.AppStatusCodes;
 import nt.uz.ecommerce.service.mapper.UsersMapper;
@@ -30,8 +34,9 @@ public class UsersServiceImpl implements UsersService {
 
     private final UsersRepository usersRepository;
     private final UsersMapper usersMapper;
-//    private final PasswordEncoder passwordEncoder;
-//    private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+    private final Gson gson;
 
     @Override
     public ResponseDto<UsersDto> addUser(UsersDto usersDto) {
@@ -50,7 +55,8 @@ public class UsersServiceImpl implements UsersService {
                         .code(VALIDATION_ERROR_CODE)
                         .message("User with this username " + usersDto.getPhoneNumber() + " already exists!")
                         .build();
-
+//            usersDto.setPassword(passwordEncoder.encode(usersDto.getPassword()));
+            usersDto.setRoles(UserRoles.ROLE_USER);
             Users users = usersMapper.toEntity(usersDto);
             usersRepository.save(users);
             return ResponseDto.<UsersDto>builder()
@@ -218,6 +224,32 @@ public class UsersServiceImpl implements UsersService {
         if(users.isEmpty()) throw new UsernameNotFoundException("user is not found");
 
         return usersMapper.toDto(users.get());
+    }
+
+    @Override
+    public ResponseDto<String> getToken(GetTokenDto getTokenDto) {
+        Optional<Users> user = usersRepository.findByEmail(getTokenDto.getEmail());
+        
+        if (user.isEmpty()) {
+            ResponseDto.<String>builder()
+                    .code(1)
+                    .message("Email or password is incorrect")
+                    .build();
+        }
+        Users users = user.get();
+        if(!passwordEncoder.matches(getTokenDto.getPassword(), user.get().getPassword())){
+            return ResponseDto.<String>builder()
+                    .message("Password is not correct")
+                    .code(VALIDATION_ERROR_CODE)
+                    .build();
+        }
+        return ResponseDto.<String>builder()
+                .success(true)
+                .code(OK_CODE)
+                .message(OK)
+                .data(jwtService.generateToken(gson.toJson(users), List.of(String.valueOf(user.get().getRoles()))))
+                .build();
+
     }
 //    public ResponseDto<String> login(LoginDto loginDto) {
 //        UsersDto users = loadUserByUsername(loginDto.getUsername());
